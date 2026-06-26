@@ -1,10 +1,27 @@
 package com.umfrancisco.app.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+@Entity
 public class Customer {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long customerId;
+	@NotBlank
+	@Size(min=5, message="Name must contain at least 5 characters")
 	private String firstName;
+	@NotBlank
+	@Size(min=5, message="Name must contain at least 5 characters")
 	private String lastName;
+	@NotBlank
+	@Column(unique=true)
 	private String email;
 	private String phoneNumber;
 	private String address;

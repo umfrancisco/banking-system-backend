@@ -3,21 +3,31 @@ package com.umfrancisco.app.model;
 import java.time.LocalDateTime;
 import com.umfrancisco.app.model.enums.TransactionStatus;
 import com.umfrancisco.app.model.enums.TransactionType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
-public class Transaction {
+@Entity
+public class BankTransaction {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long transactionId;
+	@ManyToMany
 	private Account sourceAccount;
+	@ManyToMany
 	private Account destinationAccount;
 	private TransactionType type;
 	private TransactionStatus status;
 	private LocalDateTime createAt;
 	
-	public Transaction() {
+	public BankTransaction() {
 		
 	}
 	
-	public Transaction(Long transactionId, Account sourceAccount, Account destinationAccount, TransactionType type,
+	public BankTransaction(Long transactionId, Account sourceAccount, Account destinationAccount, TransactionType type,
 			TransactionStatus status, LocalDateTime createAt) {
 		this.transactionId = transactionId;
 		this.sourceAccount = sourceAccount;
@@ -66,7 +76,7 @@ public class Transaction {
 	
 	@Override
 	public String toString() {
-		return "Transaction [transactionId=" + transactionId + ", sourceAccount=" + sourceAccount
+		return "BankTransaction [transactionId=" + transactionId + ", sourceAccount=" + sourceAccount
 				+ ", destinationAccount=" + destinationAccount + ", type=" + type + ", status=" + status + ", createAt="
 				+ createAt + "]";
 	}
