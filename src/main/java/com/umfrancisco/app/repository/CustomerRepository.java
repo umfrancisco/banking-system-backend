@@ -6,6 +6,5 @@ import com.umfrancisco.app.model.Customer;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-	Customer findByFirstName(String firstName);
-	Customer findByLastName(String lastName);
+	Customer findByEmail(String email);
 }

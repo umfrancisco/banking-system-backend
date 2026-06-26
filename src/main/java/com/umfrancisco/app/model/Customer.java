@@ -15,10 +15,10 @@ public class Customer {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long customerId;
 	@NotBlank
-	@Size(min=5, message="Name must contain at least 5 characters")
+	@Size(min=2, message="Name must contain at least 5 characters")
 	private String firstName;
 	@NotBlank
-	@Size(min=5, message="Name must contain at least 5 characters")
+	@Size(min=2, message="Name must contain at least 5 characters")
 	private String lastName;
 	@NotBlank
 	@Column(unique=true)
