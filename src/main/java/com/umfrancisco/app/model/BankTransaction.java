@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class BankTransaction {
@@ -15,9 +15,9 @@ public class BankTransaction {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long transactionId;
-	@ManyToMany
+	@ManyToOne
 	private Account sourceAccount;
-	@ManyToMany
+	@ManyToOne
 	private Account destinationAccount;
 	private TransactionType type;
 	private TransactionStatus status;
