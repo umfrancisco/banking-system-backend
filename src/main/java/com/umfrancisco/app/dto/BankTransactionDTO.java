@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import com.umfrancisco.app.model.enums.TransactionStatus;
 import com.umfrancisco.app.model.enums.TransactionType;
 
-public class TransactionDTO {
+public class BankTransactionDTO {
 	
 	private Long transactionId;
 	private Long sourceAccountId;
@@ -13,11 +13,11 @@ public class TransactionDTO {
 	private TransactionStatus status;
 	private LocalDateTime createAt;
 	
-	public TransactionDTO() {
+	public BankTransactionDTO() {
 		
 	}
 	
-	public TransactionDTO(Long transactionId, Long sourceAccountId, Long destinationAccountId, TransactionType type,
+	public BankTransactionDTO(Long transactionId, Long sourceAccountId, Long destinationAccountId, TransactionType type,
 			TransactionStatus status) {
 		this.transactionId = transactionId;
 		this.sourceAccountId = sourceAccountId;
