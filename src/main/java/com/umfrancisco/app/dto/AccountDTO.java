@@ -1,27 +1,28 @@
 package com.umfrancisco.app.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import com.umfrancisco.app.model.enums.AccountStatus;
 import com.umfrancisco.app.model.enums.AccountType;
 
 public class AccountDTO {
 	
 	private Long accountId;
-	private Long customerId;
+	private String customerEmail;
 	private BigDecimal balance;
 	private AccountType type;
 	private AccountStatus status;
+	private LocalDateTime createdAt;
 	
 	public AccountDTO() {
 		
 	}
 	
-	public AccountDTO(Long accountId, Long customerId, BigDecimal balance, AccountType type, AccountStatus status) {
+	public AccountDTO(Long accountId, String customerEmail, BigDecimal balance, AccountType type) {
 		this.accountId = accountId;
-		this.customerId = customerId;
+		this.customerEmail = customerEmail;
 		this.balance = balance;
 		this.type = type;
-		this.status = status;
 	}
 	
 	public Long getAccountId() {
@@ -30,11 +31,11 @@ public class AccountDTO {
 	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
 	}
-	public Long getCustomerId() {
-		return customerId;
+	public String getCustomerEmail() {
+		return customerEmail;
 	}
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
 	}
 	public BigDecimal getBalance() {
 		return balance;
@@ -54,11 +55,17 @@ public class AccountDTO {
 	public void setStatus(AccountStatus status) {
 		this.status = status;
 	}
-	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	@Override
 	public String toString() {
-		return "AccountDTO [accountId=" + accountId + ", customerId=" + customerId + ", balance=" + balance + ", type="
-				+ type + ", status=" + status + "]";
+		return "AccountDTO [accountId=" + accountId + ", customerEmail=" + customerEmail + ", balance=" + balance + ", type="
+				+ type + ", status=" + status + ", createdAt=" + createdAt + "]";
 	}
 	
 }

@@ -1,3 +1,4 @@
+
 {
 	"firstName": "John",
 	"lastName": "Doe",
@@ -7,9 +8,8 @@
 }
 
 {
-	"firstName": "Jack",
-	"lastName": "Doe",
-	"email": "jack.doe@email.com",
-	"phoneNumber": "123456789",
-	"address": "Street 321"
+  "customerEmail": "john.doe@email.com",
+  "balance": 1000,
+  "type": "CHECKING"
 }
+  

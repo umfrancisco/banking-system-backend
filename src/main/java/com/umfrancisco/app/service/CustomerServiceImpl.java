@@ -31,6 +31,15 @@ public class CustomerServiceImpl implements CustomerService {
 				.toList();
 		return customerDTOS;
 	}
+	
+	@Override
+	public CustomerDTO findByEmail(String email) {
+		Customer customer = repository.findByEmail(email);
+		if (customer == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+		}
+		return modelMapper.map(customer, CustomerDTO.class);
+	}
 
 	@Override
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
