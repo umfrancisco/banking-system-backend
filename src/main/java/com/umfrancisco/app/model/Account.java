@@ -1,6 +1,7 @@
 package com.umfrancisco.app.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import com.umfrancisco.app.model.enums.AccountStatus;
 import com.umfrancisco.app.model.enums.AccountType;
 import jakarta.persistence.Entity;
@@ -20,17 +21,19 @@ public class Account {
 	private BigDecimal balance;
 	private AccountType type;
 	private AccountStatus status;
+	private LocalDateTime createdAt;
 	
 	public Account() {
 		
 	}
 	
-	public Account(Long accountId, Customer customer, BigDecimal balance, AccountType type, AccountStatus status) {
+	public Account(Long accountId, Customer customer, BigDecimal balance, AccountType type, AccountStatus status, LocalDateTime createdAt) {
 		this.accountId = accountId;
 		this.customer = customer;
 		this.balance = balance;
 		this.type = type;
 		this.status = status;
+		this.createdAt = createdAt;
 	}
 	
 	public Long getAccountId() {
@@ -63,11 +66,14 @@ public class Account {
 	public void setStatus(AccountStatus status) {
 		this.status = status;
 	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 	
 	@Override
 	public String toString() {
 		return "Account [accountId=" + accountId + ", customer=" + customer + ", balance=" + balance + ", type=" + type
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", createdAt=" + createdAt + "]";
 	}
 	
 }

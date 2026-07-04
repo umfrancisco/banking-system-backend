@@ -21,20 +21,20 @@ public class BankTransaction {
 	private Account destinationAccount;
 	private TransactionType type;
 	private TransactionStatus status;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
 	
 	public BankTransaction() {
 		
 	}
 	
 	public BankTransaction(Long transactionId, Account sourceAccount, Account destinationAccount, TransactionType type,
-			TransactionStatus status, LocalDateTime createAt) {
+			TransactionStatus status, LocalDateTime createdAt) {
 		this.transactionId = transactionId;
 		this.sourceAccount = sourceAccount;
 		this.destinationAccount = destinationAccount;
 		this.type = type;
 		this.status = status;
-		this.createAt = createAt;
+		this.createdAt = createdAt;
 	}
 	
 	public Long getTransactionId() {
@@ -67,18 +67,18 @@ public class BankTransaction {
 	public void setStatus(TransactionStatus status) {
 		this.status = status;
 	}
-	public LocalDateTime getCreateAt() {
-		return createAt;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
-	public void setCreateAt(LocalDateTime createAt) {
-		this.createAt = createAt;
+	public void setCreatedAt(LocalDateTime createAt) {
+		this.createdAt = createAt;
 	}
 	
 	@Override
 	public String toString() {
 		return "BankTransaction [transactionId=" + transactionId + ", sourceAccount=" + sourceAccount
-				+ ", destinationAccount=" + destinationAccount + ", type=" + type + ", status=" + status + ", createAt="
-				+ createAt + "]";
+				+ ", destinationAccount=" + destinationAccount + ", type=" + type + ", status=" + status + ", createdAt="
+				+ createdAt + "]";
 	}
 	
 }
