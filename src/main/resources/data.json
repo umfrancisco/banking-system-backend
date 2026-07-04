@@ -12,4 +12,10 @@
   "balance": 1000,
   "type": "CHECKING"
 }
+
+{
+  "customerEmail": "john.doe@email.com",
+  "balance": 1000,
+  "type": "SAVINGS"
+}
   
