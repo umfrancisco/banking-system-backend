@@ -1,18 +1,18 @@
 
 {
-	"firstName": "John",
-	"lastName": "Doe",
-	"email": "john.doe@email.com",
-	"phoneNumber": "123456789",
-	"address": "Street 123"
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@email.com",
+  "phoneNumber": "123456789",
+  "address": "Street 123"
 }
 
 {
-	"firstName": "Jack",
-	"lastName": "Doe",
-	"email": "jack.doe@email.com",
-	"phoneNumber": "123456789",
-	"address": "Street 123"
+  "firstName": "Bob",
+  "lastName": "Square",
+  "email": "bob.square@email.com",
+  "phoneNumber": "123456789",
+  "address": "Street 123"
 }
 
 {

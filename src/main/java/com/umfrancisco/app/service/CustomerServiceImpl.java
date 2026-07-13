@@ -20,6 +20,14 @@ public class CustomerServiceImpl implements CustomerService {
 		this.modelMapper = modelMapper;
 	}
 	
+	private CustomerDTO mapToDTO(Customer customer) {
+		return modelMapper.map(customer, CustomerDTO.class);
+	}
+	
+	private Customer mapToEntity(CustomerDTO customerDTO) {
+		return modelMapper.map(customerDTO, Customer.class);
+	}
+	
 	@Override
 	public List<CustomerDTO> findAllCustomers() {
 		List<Customer> customers = repository.findAll();
@@ -27,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customers not found");
 		}
 		List<CustomerDTO> customerDTOS = customers.stream()
-				.map(customer -> modelMapper.map(customer, CustomerDTO.class))
+				.map(customer -> mapToDTO(customer))
 				.toList();
 		return customerDTOS;
 	}
@@ -38,18 +46,18 @@ public class CustomerServiceImpl implements CustomerService {
 		if (customer == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
 		}
-		return modelMapper.map(customer, CustomerDTO.class);
+		return mapToDTO(customer);
 	}
 
 	@Override
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-		Customer customer = modelMapper.map(customerDTO, Customer.class);
+		Customer customer = mapToEntity(customerDTO);
 		Customer customerFromDB = repository.findByEmail(customer.getEmail());
 		if (customerFromDB != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer "+customer.getCustomerId()+" already exists!");
 		}
 		var savedCustomer = repository.save(customer);
-		return modelMapper.map(savedCustomer, CustomerDTO.class);
+		return mapToDTO(savedCustomer);
 	}
 	
 }

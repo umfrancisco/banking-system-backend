@@ -25,6 +25,14 @@ public class AccountServiceImpl implements AccountService {
 		this.customerService = customerService;
 		this.modelMapper = modelMapper;
 	}
+	
+	private AccountDTO mapToDTO(Account account) {
+		return modelMapper.map(account, AccountDTO.class);
+	}
+	
+	private Account mapToEntity(AccountDTO accountDTO) {
+		return modelMapper.map(accountDTO, Account.class);
+	}
 
 	@Override
 	public List<AccountDTO> findAllAccounts() {
@@ -33,14 +41,14 @@ public class AccountServiceImpl implements AccountService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounts not found");
 		}
 		List<AccountDTO> accountDTOS = accounts.stream()
-				.map(account -> modelMapper.map(account, AccountDTO.class))
+				.map(account -> mapToDTO(account))
 				.toList();
 		return accountDTOS;
 	}
 
 	@Override
 	public AccountDTO saveAccount(AccountDTO accountDTO) {
-		Account account = modelMapper.map(accountDTO, Account.class);
+		Account account = mapToEntity(accountDTO);
 		CustomerDTO customerDTO = customerService.findByEmail(accountDTO.getCustomerEmail());
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
 		Account accountsFromDB = repository.findByCustomer(customer);
@@ -51,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
 		account.setCreatedAt(LocalDateTime.now());
 		account.setStatus(AccountStatus.ACTIVE);
 		var savedAccount = repository.save(account);
-		return modelMapper.map(savedAccount, AccountDTO.class);
+		return mapToDTO(savedAccount);
 	}
 
 }
