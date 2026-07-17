@@ -8,8 +8,8 @@ O projeto simula uma estrutura bancária simples, com gerenciamento de clientes 
 
 ## Tecnologias utilizadas
 
-* Java
-* Spring Boot
+* Java 17
+* Spring Boot 4
 * Spring Data JPA
 * MySQL
 * Docker
