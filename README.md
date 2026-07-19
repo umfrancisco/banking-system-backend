@@ -17,6 +17,12 @@ O projeto simula uma estrutura bancária simples, com gerenciamento de clientes 
 
 ---
 
+## Diagrama de classes
+<img src="./class-diagram.png" alt="Class Diagram" width="640">
+
+---
+
+
 ## Funcionalidades
 
 Atualmente, a API possui operações básicas para:
