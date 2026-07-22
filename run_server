@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+java -jar target/banking-system-api-0.0.1-SNAPSHOT.jar &
+JAVA_PID=$!
+
+echo "Waiting 20 seconds before starting the second application..."
+sleep 20
+
+echo "Ready to deploy using Cloud Flare..."
+cloudflared tunnel --url localhost:8080 &
+CLOUD_PID=$!
+
+echo "Java API PID: $JAVA_PID" > log.txt
+echo "Cloud PID: $CLOUD_PID" >> log.txt
+
+wait $JAVA_PID
+wait $CLOUD_PID
+
