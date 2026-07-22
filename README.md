@@ -54,14 +54,14 @@ O projeto possui três entidades principais:
 ### 1. Clonar o repositório
 
 ```bash
-git clone <url-do-repositorio>
-cd <nome-do-projeto>
+git clone https://github.com/umfrancisco/banking-system-backend.git
+cd banking-system-backend
 ```
 
 ### 2. Subir os containers
 
 ```bash
-docker-compose up --build
+docker compose up
 ```
 
 A aplicação estará disponível em:
