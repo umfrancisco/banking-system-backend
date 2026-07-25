@@ -11,8 +11,6 @@ import com.umfrancisco.app.model.enums.AccountType;
 import com.umfrancisco.app.service.AccountService;
 import com.umfrancisco.app.service.CustomerService;
 
-import jakarta.transaction.Transactional;
-
 @SpringBootTest
 class BankingSystemApiApplicationTests {
 	

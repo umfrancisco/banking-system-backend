@@ -7,4 +7,5 @@ public interface CustomerService {
 	List<CustomerDTO> findAllCustomers();
 	CustomerDTO findByEmail(String email);
 	CustomerDTO saveCustomer(CustomerDTO customerDTO);
+	CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO);
 }

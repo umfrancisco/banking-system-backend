@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.umfrancisco.app.dto.CustomerDTO;
+import com.umfrancisco.app.exception.ResourceNotFoundException;
 import com.umfrancisco.app.model.Customer;
 import com.umfrancisco.app.repository.CustomerRepository;
 
@@ -58,6 +59,21 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		var savedCustomer = repository.save(customer);
 		return mapToDTO(savedCustomer);
+	}
+
+	@Override
+	public CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO) {
+		Customer existingCustomer = repository.findById(customerId)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer with ID "+customerId+" not found"));
+		// FIELDS: firstName, lastName, email, phoneNumber, address
+		Customer customer = mapToEntity(customerDTO);
+		existingCustomer.setFirstName(customer.getFirstName());
+		existingCustomer.setLastName(customer.getLastName());
+		existingCustomer.setEmail(customer.getEmail());
+		existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+		existingCustomer.setAddress(customer.getAddress());
+		Customer updatedCustomer = repository.save(existingCustomer);
+		return mapToDTO(updatedCustomer);
 	}
 	
 }
