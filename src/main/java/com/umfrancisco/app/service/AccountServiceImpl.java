@@ -3,9 +3,7 @@ package com.umfrancisco.app.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import com.umfrancisco.app.dto.AccountDTO;
 import com.umfrancisco.app.dto.CustomerDTO;
 import com.umfrancisco.app.exception.ResourceNotFoundException;
@@ -39,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
 	public List<AccountDTO> findAllAccounts() {
 		List<Account> accounts = accountRepository.findAll();
 		if (accounts.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounts not found");
+			throw new ResourceNotFoundException("Accounts not found");
 		}
 		List<AccountDTO> accountDTOS = accounts.stream()
 				.map(account -> mapToDTO(account))
@@ -55,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 		List<Account> accountsFromDB = accountRepository.findByCustomer(customer);
 		for (var acc : accountsFromDB) {
 			if (accountsFromDB != null && acc.getType().equals(accountDTO.getType())) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account from "+account.getCustomer().getEmail()+" already exists!");
+				throw new ResourceNotFoundException("Account from "+account.getCustomer().getEmail()+" already exists!");
 			}
 		}
 		account.setCustomer(customer);
@@ -77,6 +75,14 @@ public class AccountServiceImpl implements AccountService {
 		existingAccount.setStatus(account.getStatus());
 		Account updatedAccount = accountRepository.save(existingAccount);
 		return mapToDTO(updatedAccount);
+	}
+
+	@Override
+	public AccountDTO deleteAccount(Long accountId) {
+		Account existingAccount = accountRepository.findById(accountId)
+				.orElseThrow(() -> new ResourceNotFoundException("Account with id "+accountId+" not found"));
+		accountRepository.delete(existingAccount);
+		return mapToDTO(existingAccount);
 	}
 
 }

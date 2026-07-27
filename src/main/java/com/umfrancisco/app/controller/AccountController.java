@@ -3,6 +3,7 @@ package com.umfrancisco.app.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,11 @@ public class AccountController {
 	@PutMapping("/{accountId}")
 	public ResponseEntity<AccountDTO> updateAccount(@Valid @PathVariable Long accountId, @Valid @RequestBody AccountDTO accountDTO) {
 		return new ResponseEntity<>(service.updateAccount(accountId, accountDTO), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{accountId}")
+	public ResponseEntity<AccountDTO> deleteAccount(@Valid @PathVariable Long accountId) {
+		return new ResponseEntity<>(service.deleteAccount(accountId), HttpStatus.OK);
 	}
 	
 }

@@ -7,4 +7,5 @@ public interface AccountService {
 	List<AccountDTO> findAllAccounts();
 	AccountDTO saveAccount(AccountDTO accountDTO);
 	AccountDTO updateAccount(Long accountId, AccountDTO accountDTO);
+	AccountDTO deleteAccount(Long accountId);
 }
