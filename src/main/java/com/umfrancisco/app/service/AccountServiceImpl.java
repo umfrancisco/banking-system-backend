@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.umfrancisco.app.dto.AccountDTO;
 import com.umfrancisco.app.dto.CustomerDTO;
+import com.umfrancisco.app.exception.ResourceNotFoundException;
 import com.umfrancisco.app.model.Account;
 import com.umfrancisco.app.model.Customer;
 import com.umfrancisco.app.model.enums.AccountStatus;
@@ -16,12 +17,12 @@ import com.umfrancisco.app.repository.AccountRepository;
 @Service
 public class AccountServiceImpl implements AccountService {
 	
-	private final AccountRepository repository;
+	private final AccountRepository accountRepository;
 	private final CustomerService customerService;
 	private ModelMapper modelMapper;
 	
-	public AccountServiceImpl(AccountRepository repository, CustomerService customerService, ModelMapper modelMapper) {
-		this.repository = repository;
+	public AccountServiceImpl(AccountRepository accountRepository, CustomerService customerService, ModelMapper modelMapper) {
+		this.accountRepository = accountRepository;
 		this.customerService = customerService;
 		this.modelMapper = modelMapper;
 	}
@@ -36,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<AccountDTO> findAllAccounts() {
-		List<Account> accounts = repository.findAll();
+		List<Account> accounts = accountRepository.findAll();
 		if (accounts.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounts not found");
 		}
@@ -51,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
 		Account account = mapToEntity(accountDTO);
 		CustomerDTO customerDTO = customerService.findByEmail(accountDTO.getCustomerEmail());
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
-		List<Account> accountsFromDB = repository.findByCustomer(customer);
+		List<Account> accountsFromDB = accountRepository.findByCustomer(customer);
 		for (var acc : accountsFromDB) {
 			if (accountsFromDB != null && acc.getType().equals(accountDTO.getType())) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account from "+account.getCustomer().getEmail()+" already exists!");
@@ -60,8 +61,22 @@ public class AccountServiceImpl implements AccountService {
 		account.setCustomer(customer);
 		account.setCreatedAt(LocalDateTime.now());
 		account.setStatus(AccountStatus.ACTIVE);
-		var savedAccount = repository.save(account);
+		var savedAccount = accountRepository.save(account);
 		return mapToDTO(savedAccount);
+	}
+
+	@Override
+	public AccountDTO updateAccount(Long accountId, AccountDTO accountDTO) {
+		Account existingAccount = accountRepository.findById(accountId)
+				.orElseThrow(() -> new ResourceNotFoundException("Account with id "+accountId+" not found"));
+		// FIELDS: customer, balance, type, status
+		Account account = mapToEntity(accountDTO);
+		existingAccount.setCustomer(account.getCustomer());
+		existingAccount.setBalance(account.getBalance());
+		existingAccount.setType(account.getType());
+		existingAccount.setStatus(account.getStatus());
+		Account updatedAccount = accountRepository.save(existingAccount);
+		return mapToDTO(updatedAccount);
 	}
 
 }

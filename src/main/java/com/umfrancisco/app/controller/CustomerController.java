@@ -16,7 +16,7 @@ import com.umfrancisco.app.service.CustomerService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customer")
 public class CustomerController {
 	
 	private final CustomerService service;
@@ -25,22 +25,22 @@ public class CustomerController {
 		this.service = service;
 	}
 	
-	@GetMapping("/public/customer")
+	@GetMapping
 	public ResponseEntity<List<CustomerDTO>> findAllCustomers() {
 		return new ResponseEntity<>(service.findAllCustomers(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/public/customer")
+	@PostMapping
 	public ResponseEntity<CustomerDTO> saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
 		return new ResponseEntity<>(service.saveCustomer(customerDTO), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/admin/customer/{customerId}")
+	@PutMapping("/{customerId}")
 	public ResponseEntity<CustomerDTO> updateCustomer(@Valid @PathVariable Long customerId, @Valid @RequestBody CustomerDTO customerDTO) {
 		return new ResponseEntity<>(service.updateCustomer(customerId, customerDTO), HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/admin/customer/{customerId}")
+	@DeleteMapping("/{customerId}")
 	public ResponseEntity<CustomerDTO> deleteCustomer(@Valid @PathVariable Long customerId) {
 		return new ResponseEntity<>(service.deleteCustomer(customerId), HttpStatus.OK);
 	}
