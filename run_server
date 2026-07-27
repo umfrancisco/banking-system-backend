@@ -13,6 +13,3 @@ CLOUD_PID=$!
 echo "Java API PID: $JAVA_PID" > log.txt
 echo "Cloud PID: $CLOUD_PID" >> log.txt
 
-wait $JAVA_PID
-wait $CLOUD_PID
-

@@ -2,22 +2,25 @@ package com.umfrancisco.app.service;
 
 import java.util.List;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import com.umfrancisco.app.dto.CustomerDTO;
+import com.umfrancisco.app.exception.ApiException;
 import com.umfrancisco.app.exception.ResourceNotFoundException;
+import com.umfrancisco.app.model.Account;
 import com.umfrancisco.app.model.Customer;
+import com.umfrancisco.app.repository.AccountRepository;
 import com.umfrancisco.app.repository.CustomerRepository;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	
-	private final CustomerRepository repository;
+	private final CustomerRepository customerRepository;
+	private final AccountRepository accountRepository;
 	private ModelMapper modelMapper;
 	
-	public CustomerServiceImpl(CustomerRepository repository, ModelMapper modelMapper) {
-		this.repository = repository;
+	public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, ModelMapper modelMapper) {
+		this.customerRepository = customerRepository;
+		this.accountRepository = accountRepository;
 		this.modelMapper = modelMapper;
 	}
 	
@@ -31,9 +34,9 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public List<CustomerDTO> findAllCustomers() {
-		List<Customer> customers = repository.findAll();
+		List<Customer> customers = customerRepository.findAll();
 		if (customers.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customers not found");
+			throw new ResourceNotFoundException("Customers not found");
 		}
 		List<CustomerDTO> customerDTOS = customers.stream()
 				.map(customer -> mapToDTO(customer))
@@ -43,9 +46,9 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public CustomerDTO findByEmail(String email) {
-		Customer customer = repository.findByEmail(email);
+		Customer customer = customerRepository.findByEmail(email);
 		if (customer == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+			throw new ResourceNotFoundException("Customer not found");
 		}
 		return mapToDTO(customer);
 	}
@@ -53,17 +56,17 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
 		Customer customer = mapToEntity(customerDTO);
-		Customer customerFromDB = repository.findByEmail(customer.getEmail());
-		if (customerFromDB != null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer "+customer.getCustomerId()+" already exists!");
+		Customer existingCustomer = customerRepository.findByEmail(customer.getEmail());
+		if (existingCustomer != null) {
+			throw new ApiException("Customer "+customer.getCustomerId()+" already exists!");
 		}
-		var savedCustomer = repository.save(customer);
+		var savedCustomer = customerRepository.save(customer);
 		return mapToDTO(savedCustomer);
 	}
 
 	@Override
 	public CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO) {
-		Customer existingCustomer = repository.findById(customerId)
+		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer with ID "+customerId+" not found"));
 		// FIELDS: firstName, lastName, email, phoneNumber, address
 		Customer customer = mapToEntity(customerDTO);
@@ -72,8 +75,20 @@ public class CustomerServiceImpl implements CustomerService {
 		existingCustomer.setEmail(customer.getEmail());
 		existingCustomer.setPhoneNumber(customer.getPhoneNumber());
 		existingCustomer.setAddress(customer.getAddress());
-		Customer updatedCustomer = repository.save(existingCustomer);
+		Customer updatedCustomer = customerRepository.save(existingCustomer);
 		return mapToDTO(updatedCustomer);
+	}
+
+	@Override
+	public CustomerDTO deleteCustomer(Long customerId) {
+		Customer existingCustomer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer with ID "+customerId+" not found"));
+		List<Account> accountsFromCustomer = accountRepository.findByCustomer(existingCustomer);
+		if (accountsFromCustomer.isEmpty()) {
+			customerRepository.delete(existingCustomer);
+			return mapToDTO(existingCustomer);
+		}
+		throw new ApiException("Cannot delete customer");
 	}
 	
 }

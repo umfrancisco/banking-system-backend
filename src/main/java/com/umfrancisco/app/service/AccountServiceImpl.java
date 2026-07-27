@@ -51,9 +51,11 @@ public class AccountServiceImpl implements AccountService {
 		Account account = mapToEntity(accountDTO);
 		CustomerDTO customerDTO = customerService.findByEmail(accountDTO.getCustomerEmail());
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
-		Account accountsFromDB = repository.findByCustomer(customer);
-		if (accountsFromDB != null && accountsFromDB.getType().equals(accountDTO.getType())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account from "+account.getCustomer().getEmail()+" already exists!");
+		List<Account> accountsFromDB = repository.findByCustomer(customer);
+		for (var acc : accountsFromDB) {
+			if (accountsFromDB != null && acc.getType().equals(accountDTO.getType())) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account from "+account.getCustomer().getEmail()+" already exists!");
+			}
 		}
 		account.setCustomer(customer);
 		account.setCreatedAt(LocalDateTime.now());

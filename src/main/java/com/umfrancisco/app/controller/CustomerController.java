@@ -3,6 +3,7 @@ package com.umfrancisco.app.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,11 @@ public class CustomerController {
 	@PutMapping("/admin/customer/{customerId}")
 	public ResponseEntity<CustomerDTO> updateCustomer(@Valid @PathVariable Long customerId, @Valid @RequestBody CustomerDTO customerDTO) {
 		return new ResponseEntity<>(service.updateCustomer(customerId, customerDTO), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/admin/customer/{customerId}")
+	public ResponseEntity<CustomerDTO> deleteCustomer(@Valid @PathVariable Long customerId) {
+		return new ResponseEntity<>(service.deleteCustomer(customerId), HttpStatus.OK);
 	}
 	
 }

@@ -8,14 +8,6 @@
 }
 
 {
-  "firstName": "Bob",
-  "lastName": "Square",
-  "email": "bob.square@email.com",
-  "phoneNumber": "123456789",
-  "address": "Street 123"
-}
-
-{
   "customerEmail": "john.doe@email.com",
   "balance": 1000,
   "type": "CHECKING"

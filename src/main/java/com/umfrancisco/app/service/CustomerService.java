@@ -8,4 +8,5 @@ public interface CustomerService {
 	CustomerDTO findByEmail(String email);
 	CustomerDTO saveCustomer(CustomerDTO customerDTO);
 	CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO);
+	CustomerDTO deleteCustomer(Long customerId);
 }
