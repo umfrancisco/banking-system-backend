@@ -6,6 +6,8 @@ import com.umfrancisco.app.model.enums.AccountStatus;
 import com.umfrancisco.app.model.enums.AccountType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +26,9 @@ public class Account {
 	@JoinColumn(name="customer_id")
 	private Customer customer;
 	private BigDecimal balance;
+	@Enumerated(EnumType.STRING)
 	private AccountType type;
+	@Enumerated(EnumType.STRING)
 	private AccountStatus status;
 	private LocalDateTime createdAt;
 	

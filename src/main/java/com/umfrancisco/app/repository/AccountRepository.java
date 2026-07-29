@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.umfrancisco.app.exception.ApiException;
 import com.umfrancisco.app.model.Account;
 import com.umfrancisco.app.model.Customer;
+import com.umfrancisco.app.model.enums.AccountStatus;
+import com.umfrancisco.app.model.enums.AccountType;
 
 @Repository
 public class AccountRepository {
@@ -21,14 +23,25 @@ public class AccountRepository {
 	}
 	
 	public List<Account> findAll() {
-		return jdbcClient.sql("select * from account")
-				.query(Account.class)
-				.list();
+		 return jdbcClient.sql("select * from account")
+		        .query((rs, rowNum) -> {
+		            Account account = new Account();
+		            account.setAccountId(rs.getLong("account_id"));
+		            Customer customer = new Customer();
+		            customer.setCustomerId(rs.getLong("customer_id"));
+		            account.setCustomer(customer);
+		            account.setBalance(rs.getBigDecimal("balance"));
+		            account.setType(AccountType.valueOf(rs.getString("type")));
+		            account.setStatus(AccountStatus.valueOf(rs.getString("status")));
+		            account.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+		            return account;
+		        })
+		        .list();
 	}
 	
 	public Optional<Account> findById(Long accountId) {
 		String query = """
-				select * from customer where id = :id
+				select * from account where account_id = :id
 				""";
 		return jdbcClient.sql(query)
 				.param("id", accountId)
@@ -55,8 +68,8 @@ public class AccountRepository {
 				.params(List.of(
 						a.getCustomer().getCustomerId(),
 						a.getBalance(), 
-						a.getType().ordinal(),
-						a.getStatus().ordinal(),
+						a.getType().name(),
+						a.getStatus().name(),
 						a.getCreatedAt()))
 				.update();
 		

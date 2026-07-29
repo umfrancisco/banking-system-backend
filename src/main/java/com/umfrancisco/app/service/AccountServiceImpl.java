@@ -44,17 +44,24 @@ public class AccountServiceImpl implements AccountService {
 				.toList();
 		return accountDTOS;
 	}
+	
+	private boolean isExistingAccount(Customer customer, AccountDTO accountDTO) {
+		List<Account> accountsFromDB = accountRepository.findByCustomer(customer);
+		for (var acc : accountsFromDB) {
+			if (accountsFromDB != null && acc.getType().equals(accountDTO.getType())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public AccountDTO saveAccount(AccountDTO accountDTO) {
 		Account account = mapToEntity(accountDTO);
-		CustomerDTO customerDTO = customerService.findByEmail(accountDTO.getCustomerEmail());
+		CustomerDTO customerDTO = customerService.findById(accountDTO.getCustomerId());
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
-		List<Account> accountsFromDB = accountRepository.findByCustomer(customer);
-		for (var acc : accountsFromDB) {
-			if (accountsFromDB != null && acc.getType().equals(accountDTO.getType())) {
-				throw new ResourceNotFoundException("Account from "+account.getCustomer().getEmail()+" already exists!");
-			}
+		if (isExistingAccount(customer, accountDTO)) {
+			throw new ResourceNotFoundException("Account from "+account.getCustomer().getEmail()+" already exists!");
 		}
 		account.setCustomer(customer);
 		account.setCreatedAt(LocalDateTime.now());
@@ -67,7 +74,6 @@ public class AccountServiceImpl implements AccountService {
 	public AccountDTO updateAccount(Long accountId, AccountDTO accountDTO) {
 		Account existingAccount = accountRepository.findById(accountId)
 				.orElseThrow(() -> new ResourceNotFoundException("Account with id "+accountId+" not found"));
-		// FIELDS: customer, balance, type, status
 		Account account = mapToEntity(accountDTO);
 		existingAccount.setCustomer(account.getCustomer());
 		existingAccount.setBalance(account.getBalance());

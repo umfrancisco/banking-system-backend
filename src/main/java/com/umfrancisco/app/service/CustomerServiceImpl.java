@@ -51,6 +51,16 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	@Override
+	public CustomerDTO findById(Long customerId) {
+		Optional<Customer> customer = customerRepository.findById(customerId);
+		if (customer.isEmpty()) {
+			log.error("Id not found: "+customerId);
+			throw new ResourceNotFoundException("Customer not found");
+		}
+		return mapToDTO(customer.get());
+	}
+	
+	@Override
 	public CustomerDTO findByEmail(String email) {
 		Optional<Customer> customer = customerRepository.findByEmail(email);
 		if (customer.isEmpty()) {

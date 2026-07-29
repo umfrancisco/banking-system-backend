@@ -8,7 +8,7 @@ import com.umfrancisco.app.model.enums.AccountType;
 public class AccountDTO {
 	
 	private Long accountId;
-	private String customerEmail;
+	private Long customerId;
 	private BigDecimal balance;
 	private AccountType type;
 	private AccountStatus status;
@@ -18,9 +18,9 @@ public class AccountDTO {
 		
 	}
 	
-	public AccountDTO(Long accountId, String customerEmail, BigDecimal balance, AccountType type) {
+	public AccountDTO(Long accountId, Long customerId, BigDecimal balance, AccountType type) {
 		this.accountId = accountId;
-		this.customerEmail = customerEmail;
+		this.customerId = customerId;
 		this.balance = balance;
 		this.type = type;
 	}
@@ -31,11 +31,11 @@ public class AccountDTO {
 	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
 	}
-	public String getCustomerEmail() {
-		return customerEmail;
+	public Long getCustomerId() {
+		return customerId;
 	}
-	public void setCustomerEmail(String customerEmail) {
-		this.customerEmail = customerEmail;
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 	public BigDecimal getBalance() {
 		return balance;
@@ -64,7 +64,7 @@ public class AccountDTO {
 
 	@Override
 	public String toString() {
-		return "AccountDTO [accountId=" + accountId + ", customerEmail=" + customerEmail + ", balance=" + balance + ", type="
+		return "AccountDTO [accountId=" + accountId + ", customerId=" + customerId + ", balance=" + balance + ", type="
 				+ type + ", status=" + status + ", createdAt=" + createdAt + "]";
 	}
 	

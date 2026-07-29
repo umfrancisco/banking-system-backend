@@ -8,13 +8,13 @@
 }
 
 {
-  "customerEmail": "john.doe@email.com",
+  "customerId": 1,
   "balance": 1000,
   "type": "CHECKING"
 }
 
 {
-  "customerEmail": "john.doe@email.com",
+  "customerId": 1,
   "balance": 1000,
   "type": "SAVINGS"
 }

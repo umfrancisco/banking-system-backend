@@ -27,7 +27,7 @@ public class CustomerRepository {
 	
 	public Optional<Customer> findById(Long customerId) {
 		String query = """
-				select * from customer where id = :id
+				select * from customer where customer_id = :id
 				""";
 		return jdbcClient.sql(query)
 				.param("id", customerId)

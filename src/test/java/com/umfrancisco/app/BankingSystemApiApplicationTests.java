@@ -43,7 +43,7 @@ class BankingSystemApiApplicationTests {
 		Assertions.assertNotNull(customer);
 		
 		AccountDTO account = new AccountDTO();
-		account.setCustomerEmail(customer.getEmail());
+		account.setCustomerId(customer.getCustomerId());
 		account.setBalance(BigDecimal.valueOf(1000.0));
 		account.setType(AccountType.CHECKING);
 		AccountDTO savedAccount = accountService.saveAccount(account);
