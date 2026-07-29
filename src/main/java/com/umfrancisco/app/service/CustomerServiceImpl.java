@@ -1,6 +1,8 @@
 package com.umfrancisco.app.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.umfrancisco.app.dto.CustomerDTO;
@@ -50,19 +52,19 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public CustomerDTO findByEmail(String email) {
-		Customer customer = customerRepository.findByEmail(email);
-		if (customer == null) {
+		Optional<Customer> customer = customerRepository.findByEmail(email);
+		if (customer.isEmpty()) {
 			log.error("Email not found: "+email);
 			throw new ResourceNotFoundException("Customer not found");
 		}
-		return mapToDTO(customer);
+		return mapToDTO(customer.get());
 	}
 
 	@Override
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
 		Customer customer = mapToEntity(customerDTO);
-		Customer existingCustomer = customerRepository.findByEmail(customer.getEmail());
-		if (existingCustomer != null) {
+		Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
+		if (existingCustomer.isPresent()) {
 			log.error("Cannot save this customer: "+customerDTO);
 			throw new ApiException("Customer "+customer.getCustomerId()+" already exists!");
 		}
