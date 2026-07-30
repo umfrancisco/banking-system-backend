@@ -2,7 +2,6 @@ package com.umfrancisco.app.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.umfrancisco.app.dto.CustomerDTO;
@@ -32,7 +31,6 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerDTO mapToDTO(Customer customer) {
 		return modelMapper.map(customer, CustomerDTO.class);
 	}
-	
 	private Customer mapToEntity(CustomerDTO customerDTO) {
 		return modelMapper.map(customerDTO, Customer.class);
 	}
@@ -54,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO findById(Long customerId) {
 		Optional<Customer> customer = customerRepository.findById(customerId);
 		if (customer.isEmpty()) {
-			log.error("Id not found: "+customerId);
+			log.error("Id not found");
 			throw new ResourceNotFoundException("Customer not found");
 		}
 		return mapToDTO(customer.get());
@@ -64,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO findByEmail(String email) {
 		Optional<Customer> customer = customerRepository.findByEmail(email);
 		if (customer.isEmpty()) {
-			log.error("Email not found: "+email);
+			log.error("Customer with this email not found");
 			throw new ResourceNotFoundException("Customer not found");
 		}
 		return mapToDTO(customer.get());
@@ -75,8 +73,8 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customer = mapToEntity(customerDTO);
 		Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
 		if (existingCustomer.isPresent()) {
-			log.error("Cannot save this customer: "+customerDTO);
-			throw new ApiException("Customer "+customer.getCustomerId()+" already exists!");
+			log.error("Cannot save this customer");
+			throw new ApiException("Customer already exists");
 		}
 		var savedCustomer = customerRepository.save(customer);
 		return mapToDTO(savedCustomer);
@@ -86,8 +84,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO) {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> {
-					log.error("Error while updating customer: "+customerId);
-					return new ResourceNotFoundException("Customer with ID "+customerId+" not found");
+					log.error("Error while updating customer");
+					return new ResourceNotFoundException("Customer not found");
 				});
 		// FIELDS: firstName, lastName, email, phoneNumber, address
 		Customer customer = mapToEntity(customerDTO);
@@ -105,7 +103,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> {
 					log.error("Error while deleting customer: "+customerId);
-					return new ResourceNotFoundException("Customer with ID "+customerId+" not found");
+					return new ResourceNotFoundException("Customer not found");
 				});
 		List<Account> accountsFromCustomer = accountRepository.findByCustomer(existingCustomer);
 		if (accountsFromCustomer.isEmpty()) {

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import com.umfrancisco.app.model.enums.TransactionStatus;
 import com.umfrancisco.app.model.enums.TransactionType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +23,9 @@ public class BankTransaction {
 	private Account sourceAccount;
 	@ManyToOne
 	private Account destinationAccount;
+	@Enumerated(EnumType.STRING)
 	private TransactionType type;
+	@Enumerated(EnumType.STRING)
 	private TransactionStatus status;
 	private LocalDateTime createdAt;
 	

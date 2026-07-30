@@ -30,6 +30,11 @@ public class AccountController {
 		return new ResponseEntity<>(service.findAllAccounts(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/{email}")
+	public ResponseEntity<List<AccountDTO>> findAccountByEmail(@Valid @PathVariable String email) {
+		return new ResponseEntity<>(service.findByEmail(email), HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<AccountDTO> saveAccount(@Valid @RequestBody AccountDTO accountDTO) {
 		return new ResponseEntity<>(service.saveAccount(accountDTO), HttpStatus.OK);
