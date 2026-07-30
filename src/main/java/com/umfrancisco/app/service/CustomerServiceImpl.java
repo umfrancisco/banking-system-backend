@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerDTO> findAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
 		if (customers.isEmpty()) {
-			log.error("Customer table is empty: "+customers);
+			log.error("Customer table is empty: {}", customers);
 			throw new ResourceNotFoundException("Customers not found");
 		}
 		List<CustomerDTO> customerDTOS = customers.stream()
@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO findById(Long customerId) {
 		Optional<Customer> customer = customerRepository.findById(customerId);
 		if (customer.isEmpty()) {
-			log.error("Id not found");
+			log.error("Id not found: {}", customerId);
 			throw new ResourceNotFoundException("Customer not found");
 		}
 		return mapToDTO(customer.get());
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO findByEmail(String email) {
 		Optional<Customer> customer = customerRepository.findByEmail(email);
 		if (customer.isEmpty()) {
-			log.error("Customer with this email not found");
+			log.error("Customer with this email not found: {}", email);
 			throw new ResourceNotFoundException("Customer not found");
 		}
 		return mapToDTO(customer.get());
@@ -73,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customer = mapToEntity(customerDTO);
 		Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
 		if (existingCustomer.isPresent()) {
-			log.error("Cannot save this customer");
+			log.error("Cannot save this customer: {}", customerDTO);
 			throw new ApiException("Customer already exists");
 		}
 		var savedCustomer = customerRepository.save(customer);
@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO) {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> {
-					log.error("Error while updating customer");
+					log.error("Error while updating customer: {}", customerDTO);
 					return new ResourceNotFoundException("Customer not found");
 				});
 		// FIELDS: firstName, lastName, email, phoneNumber, address
@@ -102,7 +102,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO deleteCustomer(Long customerId) {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> {
-					log.error("Error while deleting customer: "+customerId);
+					log.error("Error while deleting customer: {}", customerId);
 					return new ResourceNotFoundException("Customer not found");
 				});
 		List<Account> accountsFromCustomer = accountRepository.findByCustomer(existingCustomer);

@@ -43,9 +43,8 @@ public class AccountServiceImpl implements AccountService {
 	public List<AccountDTO> findAllAccounts() {
 		List<Account> accounts = accountRepository.findAll();
 		if (accounts.isEmpty()) {
-			var msg = "Accounts not found";
-			log.error(msg);
-			throw new ResourceNotFoundException(msg);
+			log.error("Accounts not found: {}", accounts);
+			throw new ResourceNotFoundException("Accounts not found");
 		}
 		List<AccountDTO> accountDTOS = accounts.stream()
 				.map(account -> mapToDTO(account))
@@ -63,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
 			accounts.add(mapToDTO(acc));
 		}
 		if (accounts.isEmpty()) {
-			log.error("Accounts for this customer not found");
+			log.error("Accounts for this customer not found: {}", existingCustomer);
 		}
 		return accounts;
 	}
@@ -84,9 +83,8 @@ public class AccountServiceImpl implements AccountService {
 		CustomerDTO customerDTO = customerService.findById(accountDTO.getCustomerId());
 		Customer customer = mapToEntity(customerDTO);
 		if (isExistingAccount(customer, accountDTO)) {
-			var msg = "This account already exists";
-			log.error(msg);
-			throw new ResourceNotFoundException(msg);
+			log.error("This account already exists: {}", accountDTO);
+			throw new ResourceNotFoundException("This account already exists");
 		}
 		account.setCustomer(customer);
 		account.setCreatedAt(LocalDateTime.now());
@@ -99,9 +97,8 @@ public class AccountServiceImpl implements AccountService {
 	public AccountDTO updateAccount(Long accountId, AccountDTO accountDTO) {
 		Account existingAccount = accountRepository.findById(accountId)
 				.orElseThrow(() -> {
-					var msg = "Account not found";
-					log.error(msg);
-					return new ResourceNotFoundException(msg);
+					log.error("Account not found: {}", accountDTO);
+					return new ResourceNotFoundException("Account not found");
 				});
 		Account account = mapToEntity(accountDTO);
 		existingAccount.setCustomer(account.getCustomer());
@@ -116,9 +113,8 @@ public class AccountServiceImpl implements AccountService {
 	public AccountDTO deleteAccount(Long accountId) {
 		Account existingAccount = accountRepository.findById(accountId)
 				.orElseThrow(() -> {
-					var msg = "Account not found";
-					log.error(msg);
-					return new ResourceNotFoundException(msg);
+					log.error("Account not found: {}", accountId);
+					return new ResourceNotFoundException("Account not found");
 				});
 		accountRepository.delete(existingAccount);
 		return mapToDTO(existingAccount);
