@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
 		CustomerDTO customerDTO = customerService.findById(accountDTO.getCustomerId());
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
 		if (isExistingAccount(customer, accountDTO)) {
-			throw new ResourceNotFoundException("Account from "+account.getCustomer().getEmail()+" already exists!");
+			throw new ResourceNotFoundException("This account already exists!");
 		}
 		account.setCustomer(customer);
 		account.setCreatedAt(LocalDateTime.now());
@@ -73,7 +73,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public AccountDTO updateAccount(Long accountId, AccountDTO accountDTO) {
 		Account existingAccount = accountRepository.findById(accountId)
-				.orElseThrow(() -> new ResourceNotFoundException("Account with id "+accountId+" not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Account not found"));
 		Account account = mapToEntity(accountDTO);
 		existingAccount.setCustomer(account.getCustomer());
 		existingAccount.setBalance(account.getBalance());
@@ -86,7 +86,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public AccountDTO deleteAccount(Long accountId) {
 		Account existingAccount = accountRepository.findById(accountId)
-				.orElseThrow(() -> new ResourceNotFoundException("Account with id "+accountId+" not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Account not found"));
 		accountRepository.delete(existingAccount);
 		return mapToDTO(existingAccount);
 	}
