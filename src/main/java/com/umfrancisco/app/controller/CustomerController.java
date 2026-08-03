@@ -30,6 +30,11 @@ public class CustomerController {
 		return new ResponseEntity<>(service.findAllCustomers(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/{email}")
+	public ResponseEntity<CustomerDTO> findCustomerByEmail(@Valid @PathVariable String email) {
+		return new ResponseEntity<>(service.findByEmail(email), HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<CustomerDTO> saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
 		return new ResponseEntity<>(service.saveCustomer(customerDTO), HttpStatus.CREATED);
